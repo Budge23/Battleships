@@ -1,0 +1,102 @@
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(29, 29, 29);
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  font-size: 50px;
+  text-align: center;
+  color: white;
+}
+
+#maps {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#playermap, #pcmap {
+  height: 550px;
+  width: 550px;
+  margin: 50px;
+  border: 1px solid white;
+  background-color: rgb(65, 65, 65);
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mapsquare {
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  background-color: aqua;
+}
+
+#hit {
+  background-color: red;
+}
+
+#miss {
+  background-color: gray;
+}
+
+#boatyard {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+#boats {
+  width: 500px;
+  height: 250px;
+  display: flex;
+  background-color: aqua;
+}
+
+.ships {
+  height: fit-content;
+}
+
+#Carrier div{
+  height: 50px;
+  width: 50px;
+  background-color: red;
+}
+
+#Battleship div {
+  height: 50px;
+  width: 50px;
+  background-color: green;
+
+}
+
+#Cruiser div {
+  height: 50px;
+  width: 50px;
+  background-color: yellow;
+
+}
+
+#Sub div {
+  height: 50px;
+  width: 50px;
+  background-color: orange;
+
+}
+
+#Tug div {
+  height: 50px;
+  width: 50px;
+  background-color: brown;
+
+}
