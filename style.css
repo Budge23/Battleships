@@ -33,7 +33,7 @@ h1 {
   flex-wrap: wrap;
 }
 
-.mapsquare {
+.mapsquare, .mapSquarePc {
   height: 50px;
   width: 50px;
   border: 1px solid black;
@@ -99,4 +99,11 @@ h1 {
   width: 50px;
   background-color: brown;
 
+}
+
+#playermap #Carrier {
+  height: 50px;
+  width: 50px;
+  background-color: red;
+  border: none;
 }

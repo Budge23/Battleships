@@ -6,12 +6,12 @@ const width = 10
 const divArray = []
 
 for (let i = 0; i < width ** 2; i++) {
-  divArray.push('cell')
+  divArray.push(i)
 }
 
 divArray.forEach((cell) => {
   const div = document.createElement('div')
-  div.classList.add('mapsquare')
+  div.classList.add('mapSquarePc')
   pcMap.appendChild(div)
 })
 
@@ -19,9 +19,11 @@ divArray.forEach((cell) => {
   const div = document.createElement('div')
   div.classList.add('mapsquare')
   playerMap.appendChild(div)
+  div.setAttribute(`id`, `${cell}`)
+  div.setAttribute('draggable', 'true')
 })
 
-const playerCells = Array.from(document.querySelectorAll('#playermap div'))
+const playerCells = document.querySelectorAll('.mapsquare')
 const pcCells = document.querySelectorAll('#pcmap div')
 
 
@@ -60,6 +62,8 @@ userProfile.ships.push(new boats('Sub', 2))
 userProfile.ships.push(new boats('Tug', 1))
 
 const boatYard = document.querySelector('#boats')
+const allBoatYard = document.querySelector('#boat-yard')
+
 
 userProfile.ships.forEach((ship) => {
   const divTop = document.createElement('div')
@@ -70,35 +74,42 @@ userProfile.ships.forEach((ship) => {
   const shipName = document.querySelector(`#${ship.name}`)
   for (let i = 0; i < ship.length; i++) {
     const div = document.createElement('div')
-    div.setAttribute('id', `${ship.name}${i + 1}`)
+    div.setAttribute('id', `${ship.name}${i}`)
     shipName.appendChild(div)
   }
 })
 
-let shipNameWithIndex
+let selectedShipNameWithIndex
 let draggedShip
 let draggedShipLength
 
 const playerShips = Array.from(document.querySelectorAll('.ships'))
 
 
-playerCells.forEach(square => square.addEventListener('ondragstart', dragStart))
+playerShips.forEach(square => square.addEventListener('dragstart', dragStart))
+playerCells.forEach(square => square.addEventListener('dragstart', dragStart))
 playerCells.forEach(square => square.addEventListener('dragover', (e) => {
-  e.preventDefault
+  e.preventDefault()
 }))
 playerCells.forEach(square => square.addEventListener('dragenter', (e) => {
-  e.preventDefault
+  e.preventDefault()
 }))
-playerCells.forEach(square => square.addEventListener('dragleave', () => {
-
+playerCells.forEach(square => square.addEventListener('dragleave', (e) => {
+  e.preventDefault()
 }))
 playerCells.forEach(square => square.addEventListener('drop', dragDrop))
-playerCells.forEach(square => square.addEventListener('dragend', () => { }))
+playerCells.forEach(square => square.addEventListener('dragend', () => {
+}))
 
+playerCells.forEach(cell => cell.addEventListener('click', () => {
+  console.log(playerCells[50])
+}))
 
 playerShips.forEach(ship => ship.addEventListener('mousedown', (e) => {
-  shipNameWithIndex = e.target.id
+  selectedShipNameWithIndex = e.target.id
 }))
+
+
 
 function dragStart() {
   draggedShip = this
@@ -107,19 +118,19 @@ function dragStart() {
 }
 
 function dragDrop() {
-  let shipNameWithLastId = draggedShip.lastChild.id
-  let shipclass = shipNameWithLastId.slice(0, -2)
-  let lastShipIndex = parseInt(shipNameWithLastId.substr(-1))
-  let shipLastId = lastShipIndex + parseInt(this.dataset.id)
-
-  let selectedShipIndex = parseInt(shipNameWithIndex.substr(-1))
+  const shipNameWithLastId = draggedShip.lastChild.id
+  const shipClass = shipNameWithLastId.slice(0, -1)
+  const lastShipIndex = parseInt(shipNameWithLastId.substr(-1))
+  let shipLastId = lastShipIndex + parseInt(this.id)
+  const selectedShipIndex = parseInt(selectedShipNameWithIndex.substr(-1))
 
   shipLastId = shipLastId - selectedShipIndex
 
-  for (let i = 0; i < draggedShipLength; i++) {
-    playerCells[parseInt(this.dataset.id) - selectedShipIndex + width * i].setAttribute('id', `${shipclass}`)
+  console.log(selectedShipIndex)
+
+  for (let i=0; i < draggedShipLength; i++) {
+    playerCells[parseInt(this.id) - selectedShipIndex + width * i].setAttribute('id', `${shipClass}`)
   }
-
   boatYard.removeChild(draggedShip)
-
 }
+
