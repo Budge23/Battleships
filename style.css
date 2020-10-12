@@ -40,11 +40,11 @@ h1 {
   background-color: aqua;
 }
 
-#hit {
-  background-color: red;
+.hit {
+  background-color: black;
 }
 
-#miss {
+.miss {
   background-color: gray;
 }
 
@@ -137,4 +137,8 @@ h1 {
   background-color: brown;
   border: 1px solid brown; 
 
+}
+
+.overlay {
+  background-color: darkgrey;!
 }
