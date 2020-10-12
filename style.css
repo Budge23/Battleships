@@ -101,9 +101,40 @@ h1 {
 
 }
 
-#playermap #Carrier {
+ #Carrier1 {
   height: 50px;
   width: 50px;
   background-color: red;
-  border: none;
+  border: 1px solid red;
+}
+
+ #Battleship1 {
+  height: 50px;
+  width: 50px;
+  background-color: green;
+  border: 1px solid green;
+}
+
+ #Cruiser1{
+  height: 50px;
+  width: 50px;
+  background-color: yellow;
+  border: 1px solid yellow;
+
+}
+
+ #Sub1 {
+  height: 50px;
+  width: 50px;
+  background-color: orange;
+  border: 1px solid orange;
+
+}
+
+#Tug1 {
+  height: 50px;
+  width: 50px;
+  background-color: brown;
+  border: 1px solid brown; 
+
 }
