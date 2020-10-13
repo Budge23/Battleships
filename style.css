@@ -74,18 +74,13 @@ h1 {
 }
 
 .mapsquare, .mapSquarePc {
-  /* height: 50px;
-  width: 50px;
-  border: 1px solid black;
-  background-color: aqua; */
-}
-
-.mapsquare1, .mapSquarePc1 {
   height: 50px;
   width: 50px;
   border: 1px solid black;
   background-color: aqua;
 }
+
+
 
 .hit {
   background-color: black;

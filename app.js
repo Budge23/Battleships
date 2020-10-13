@@ -4,32 +4,35 @@ const maps = document.querySelector('#maps')
 const playerMap = document.querySelector('#playermap')
 const pcMap = document.querySelector('#pcmap')
 
+let width = 10
 
+function createBoard() {
+  width = 10
+  const divArray = []
 
+  for (let i = 0; i < width ** 2; i++) {
+    divArray.push(i)
+  }
 
-const width = 10
-const divArray = []
+  divArray.forEach((cell) => {
+    const div = document.createElement('div')
+    div.classList.add('mapSquarePc')
+    pcMap.appendChild(div)
+    div.setAttribute('id', `${cell}`)
+  })
 
-for (let i = 0; i < width ** 2; i++) {
-  divArray.push(i)
+  divArray.forEach((cell) => {
+    const div = document.createElement('div')
+    div.classList.add('mapsquare')
+    playerMap.appendChild(div)
+    div.setAttribute(`id`, `${cell}`)
+  })
+  playerCells = document.querySelectorAll('.mapsquare')
+  pcCells = document.querySelectorAll('.mapSquarePc')
 }
 
-divArray.forEach((cell) => {
-  const div = document.createElement('div')
-  div.classList.add('mapSquarePc')
-  pcMap.appendChild(div)
-  div.setAttribute('id', `${cell}`)
-})
-
-divArray.forEach((cell) => {
-  const div = document.createElement('div')
-  div.classList.add('mapsquare')
-  playerMap.appendChild(div)
-  div.setAttribute(`id`, `${cell}`)
-})
-
-let playerCells = document.querySelectorAll('.mapsquare')
-let pcCells = document.querySelectorAll('.mapSquarePc')
+let playerCells = null
+let pcCells = null
 
 
 //! Creating the profiles and player boats
@@ -60,12 +63,12 @@ class boats {
   }
 }
 
-
 userProfile.ships.push(new boats('Carrier', 5))
 userProfile.ships.push(new boats('Battleship', 4))
 userProfile.ships.push(new boats('Cruiser', 3))
 userProfile.ships.push(new boats('Sub', 2))
 userProfile.ships.push(new boats('Tug', 1))
+
 
 const boatYard = document.querySelector('#boats')
 
@@ -86,25 +89,6 @@ function createUserShips() {
     }
   })
 }
-
-//! Here!!!! for some reason the button will have ot be called from here????
-const startButton = document.querySelector('.gamestart')
-
-
-
-console.log(startButton)
-startButton.addEventListener('click', () => {
-  maps.classList.add('maps')
-  playerMap.classList.add('playermap')
-  pcMap.classList.add('pcmap')
-  playerCells.forEach((cell) => cell.classList.add('mapsquare1'))
-  pcCells.forEach((cell) => cell.classList.add('mapSquarePc1'))
-  createUserShips()
-  dragDrop()
-
-})
-
-
 
 
 
@@ -180,9 +164,10 @@ pcProfile.ships.push(new boats('Sub', 2))
 pcProfile.ships.push(new boats('Tug', 1))
 
 
-pcCells = Array.from(pcCells)
+
 
 function computerStart() {
+  pcCells = Array.from(pcCells)
   pcProfile.ships.forEach((ship) => {
     let placed = false
     while (placed === false) {
@@ -217,18 +202,18 @@ function computerStart() {
   })
 }
 
-computerStart()
+
 
 
 
 // ! Ship health and firing 
 
 
-let pcCarrierHealth = pcProfile.ships[0].lives
-let pcBattleshipHealth = pcProfile.ships[1].lives
-let pcCruiserHealth = pcProfile.ships[2].lives
-let pcSubHealth = pcProfile.ships[3].lives
-let pcTugHealth = pcProfile.ships[4].lives
+let pcCarrierHealth = 0
+let pcBattleshipHealth = 0
+let pcCruiserHealth = 0
+let pcSubHealth = 0
+let pcTugHealth = 0
 let pcLives = 4
 
 function sunk() {
@@ -243,6 +228,12 @@ function sunk() {
 let cellship = null
 
 function hit(cellShip) {
+  pcCarrierHealth = pcProfile.ships[0].lives
+  pcBattleshipHealth = pcProfile.ships[1].lives
+  pcCruiserHealth = pcProfile.ships[2].lives
+  pcSubHealth = pcProfile.ships[3].lives
+  pcTugHealth = pcProfile.ships[4].lives
+  pcLives = 4
   if (cellShip === 'Carrier') {
     if (pcCarrierHealth === 1) {
       sunk()
@@ -278,38 +269,36 @@ function hit(cellShip) {
 
 }
 
+function userClick() {
+  pcCells.forEach(cell => cell.addEventListener('click', () => {
+    const cellShip = ((cell.id).substr(0, cell.id.length))
 
-pcCells.forEach(cell => cell.addEventListener('click', () => {
-  const cellShip = ((cell.id).substr(0, cell.id.length))
+    if (cell.classList.contains('taken')) {
+      hit(cellShip)
+      cell.removeAttribute('id')
+      cell.classList.add('hit')
 
-  if (cell.classList.contains('taken')) {
-    hit(cellShip)
-    cell.removeAttribute('id')
-    cell.classList.add('hit')
-
-  } else {
-    cell.classList.add('miss')
-  }
-
-
-  setTimeout(() => {
-    computerTurn()
-  }, 500)
-})
-)
+    } else {
+      cell.classList.add('miss')
+    }
 
 
-function userFiring(cell) {
-
+    setTimeout(() => {
+      computerTurn()
+    }, 500)
+  }, { once: true })
+  )
 }
+
+
 
 // ! PC Firing 
 
-let playerCarrierHealth = userProfile.ships[0].lives
-let playerBattleshipHealth = userProfile.ships[1].lives
-let playerCruiserHealth = userProfile.ships[2].lives
-let playerSubHealth = userProfile.ships[3].lives
-let playerTugHealth = userProfile.ships[4].lives
+let playerCarrierHealth = 0
+let playerBattleshipHealth = 0
+let playerCruiserHealth = 0
+let playerSubHealth = 0
+let playerTugHealth = 0
 let playerLives = 4
 
 function playerSunk() {
@@ -324,6 +313,14 @@ function playerSunk() {
 let PlayerCellShip = null
 
 function playerHit(PlayerCellShip) {
+  playerCarrierHealth = userProfile.ships[0].lives
+  playerBattleshipHealth = userProfile.ships[1].lives
+  playerCruiserHealth = userProfile.ships[2].lives
+  playerSubHealth = userProfile.ships[3].lives
+  playerTugHealth = userProfile.ships[4].lives
+  playerLives = 4
+
+
   if (PlayerCellShip === 'Carrier') {
     if (playerCarrierHealth === 1) {
       playerSunk()
@@ -392,10 +389,6 @@ let computerTurnTwo = null
 let computerTurnThree = null
 let computerTurnFour = null
 
-function resetHits() {
-
-}
-
 
 // ! Computer Turn 
 
@@ -409,8 +402,7 @@ function computerTurn() {
     const randomCell = Math.floor(Math.random() * availableCells.length)
 
     const targetCell = playerCells[randomCell]
-    let PlayerCellShip = (targetCell.id).substr(0, targetCell.id.length - 1)
-    console.log(targetCell)
+    const PlayerCellShip = (targetCell.id).substr(0, targetCell.id.length - 1)
     if (availableCells.includes(targetCell)) {
       canGo = true
       if (computerTurnOne === null && computerTurnTwo === null) {
@@ -418,7 +410,6 @@ function computerTurn() {
           playerHit(PlayerCellShip)
           targetCell.classList.add('hit')
           targetCell.removeAttribute(`id`)
-          computerTurnOne = Number(randomCell)
         } else {
           targetCell.classList.add('miss')
         }
@@ -461,3 +452,19 @@ function computerTurn() {
 
 // ! Styling and welcome screen
 
+const startButton = document.querySelector('.gamestart')
+const introcard = document.querySelector('#introcard')
+
+
+console.log(startButton)
+startButton.addEventListener('click', () => {
+  maps.classList.add('maps')
+  playerMap.classList.add('playermap')
+  pcMap.classList.add('pcmap')
+  createBoard()
+  createUserShips()
+  dragDrop()
+  computerStart()
+  userClick()
+  introcard.remove()
+})
