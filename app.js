@@ -2,26 +2,30 @@
 const playerMap = document.querySelector('#playermap')
 const pcMap = document.querySelector('#pcmap')
 
-const width = 10
-const divArray = []
+function generateBoard() {
+  const width = 10
+  const divArray = []
 
-for (let i = 0; i < width ** 2; i++) {
-  divArray.push(i)
+  for (let i = 0; i < width ** 2; i++) {
+    divArray.push(i)
+  }
+
+  divArray.forEach((cell) => {
+    const div = document.createElement('div')
+    div.classList.add('mapSquarePc')
+    pcMap.appendChild(div)
+    div.setAttribute('id', `${cell}`)
+  })
+
+  divArray.forEach((cell) => {
+    const div = document.createElement('div')
+    div.classList.add('mapsquare')
+    playerMap.appendChild(div)
+    div.setAttribute(`id`, `${cell}`)
+  })
 }
 
-divArray.forEach((cell) => {
-  const div = document.createElement('div')
-  div.classList.add('mapSquarePc')
-  pcMap.appendChild(div)
-  div.setAttribute('id', `${cell}`)
-})
-
-divArray.forEach((cell) => {
-  const div = document.createElement('div')
-  div.classList.add('mapsquare')
-  playerMap.appendChild(div)
-  div.setAttribute(`id`, `${cell}`)
-})
+generateBoard()
 
 let playerCells = document.querySelectorAll('.mapsquare')
 let pcCells = document.querySelectorAll('.mapSquarePc')
@@ -249,13 +253,16 @@ function hit(cellShip) {
 
 }
 
+// ! User Firing Function
 
-const playerClick = pcCells.forEach(cell => cell.addEventListener('click', () => {
-  const cellShip = ((cell.id).substr(0, cell.id.length ))
+function userFiring(cell) {
+  const cellShip = ((cell.id).substr(0, cell.id.length))
+
   if (cell.classList.contains('taken')) {
     hit(cellShip)
     cell.removeAttribute('id')
     cell.classList.add('hit')
+
   } else {
     cell.classList.add('miss')
   }
@@ -263,10 +270,19 @@ const playerClick = pcCells.forEach(cell => cell.addEventListener('click', () =>
 
   setTimeout(() => {
     computerTurn()
-    playerClick
   }, 500)
 
-})
+  cell.disabled = true
+}
+
+
+
+// ! Event listener for player
+
+
+pcCells.forEach(cell => cell.addEventListener('click', () => {
+  userFiring(cell)
+}, { once: true })
 )
 
 
@@ -294,6 +310,12 @@ function playerHit(PlayerCellShip) {
   if (PlayerCellShip === 'Carrier') {
     if (playerCarrierHealth === 1) {
       playerSunk()
+      return (
+        computerTurnOne = null,
+        computerTurnTwo = null,
+        computerTurnThree = null,
+        computerTurnFour = null
+      )
     } else {
       playerCarrierHealth--
     }
@@ -301,48 +323,120 @@ function playerHit(PlayerCellShip) {
   } else if (PlayerCellShip === 'Battleship') {
     if (playerBattleshipHealth === 1) {
       playerSunk()
+      return (
+        computerTurnOne = null,
+        computerTurnTwo = null,
+        computerTurnThree = null,
+        computerTurnFour = null
+      )
     } else playerBattleshipHealth--
 
 
   } else if (PlayerCellShip === 'Cruiser') {
     if (playerCruiserHealth === 1) {
       playerSunk()
+      return (
+        computerTurnOne = null,
+        computerTurnTwo = null,
+        computerTurnThree = null,
+        computerTurnFour = null
+      )
     } else playerCruiserHealth--
 
 
   } else if (PlayerCellShip === 'Sub') {
     if (playerSubHealth === 1) {
       playerSunk()
+      return (
+        computerTurnOne = null,
+        computerTurnTwo = null,
+        computerTurnThree = null,
+        computerTurnFour = null
+      )
     } else
       playerSubHealth -= 1
 
   } else if (PlayerCellShip === 'Tug') {
     if (playerTugHealth === 1) {
       playerSunk()
+      return (
+        computerTurnOne = null,
+        computerTurnTwo = null,
+        computerTurnThree = null,
+        computerTurnFour = null
+      )
     } else playerTugHealth--
   }
 
 }
 
-const computerTurnOne = null
-const computerTurnTwo = null
+let computerTurnOne = null
+let computerTurnTwo = null
+let computerTurnThree = null
+let computerTurnFour = null
+
+function resetHits() {
+
+}
+
+
+// ! Computer Turn 
 
 function computerTurn() {
+  let canGo = false
+  while (canGo === false) {
+    playerCells = Array.from(playerCells)
 
-  playerCells = Array.from(playerCells)
+    const availableCells = playerCells.filter(word => !word.classList.contains('miss', 'hit'))
 
-  const availableCells = playerCells.filter(word => !word.classList.contains('miss', 'hit'))
-  const randomCell = Math.floor(Math.random() * availableCells.length)
-  const targetCell = availableCells[randomCell]
-  let PlayerCellShip = (targetCell.id).substr(0, targetCell.id.length - 1)
-  if (computerTurnOne === null && computerTurnTwo === null) {
-    if (availableCells[randomCell].classList.contains('taken')) {
-      playerHit(PlayerCellShip)
-      targetCell.classList.add('hit')
-      targetCell.removeAttribute(`id`)
-    } else {
-      targetCell.classList.add('miss')
+    const randomCell = Math.floor(Math.random() * availableCells.length)
+
+    const targetCell = playerCells[randomCell]
+    let PlayerCellShip = (targetCell.id).substr(0, targetCell.id.length - 1)
+    console.log(targetCell)
+    if (availableCells.includes(targetCell)) {
+      canGo = true
+      if (computerTurnOne === null && computerTurnTwo === null) {
+        if (playerCells[randomCell].classList.contains('taken')) {
+          playerHit(PlayerCellShip)
+          targetCell.classList.add('hit')
+          targetCell.removeAttribute(`id`)
+          computerTurnOne = Number(randomCell)
+        } else {
+          targetCell.classList.add('miss')
+        }
+        // } else if (computerTurnOne !== null && computerTurnTwo === null) {
+
+
+        //   let canGoTwo = false
+        //   while (canGoTwo === false) {
+        //     const opTwo = [-10, -1, 1, 10]
+        //     console.log(opTwo.length)
+        //     const randomGoTwo = Math.floor(Math.random() * opTwo.length)
+        //     console.log(opTwo[randomGoTwo])
+        //     let goTwo = (playerCells[computerTurnOne + opTwo[randomGoTwo]])
+
+        //     if (availableCells.includes(goTwo)) {
+        //       canGoTwo = true
+        //       if (goTwo.classList.contains('taken')) {
+
+        //         let playerCellShip = (goTwo.id).substr(0, goTwo.length)
+        //         playerHit(playerCellShip)
+        //         goTwo.classList.add('hit')
+        //         goTwo.removeAttribute('id')
+        //         let computerTurnTwo = goTwo
+
+        //       } else {
+        //         goTwo.classList.add('miss')
+        //       }
+        //     } else {
+        //       canGoTwo = false
+        //     }
+        //   }
+      } else {
+        canGo = false
+      }
+
     }
-
   }
 }
