@@ -1,31 +1,32 @@
 //! Setting the Map
+
+const maps = document.querySelector('#maps')
 const playerMap = document.querySelector('#playermap')
 const pcMap = document.querySelector('#pcmap')
 
-function generateBoard() {
-  const width = 10
-  const divArray = []
 
-  for (let i = 0; i < width ** 2; i++) {
-    divArray.push(i)
-  }
 
-  divArray.forEach((cell) => {
-    const div = document.createElement('div')
-    div.classList.add('mapSquarePc')
-    pcMap.appendChild(div)
-    div.setAttribute('id', `${cell}`)
-  })
 
-  divArray.forEach((cell) => {
-    const div = document.createElement('div')
-    div.classList.add('mapsquare')
-    playerMap.appendChild(div)
-    div.setAttribute(`id`, `${cell}`)
-  })
+const width = 10
+const divArray = []
+
+for (let i = 0; i < width ** 2; i++) {
+  divArray.push(i)
 }
 
-generateBoard()
+divArray.forEach((cell) => {
+  const div = document.createElement('div')
+  div.classList.add('mapSquarePc')
+  pcMap.appendChild(div)
+  div.setAttribute('id', `${cell}`)
+})
+
+divArray.forEach((cell) => {
+  const div = document.createElement('div')
+  div.classList.add('mapsquare')
+  playerMap.appendChild(div)
+  div.setAttribute(`id`, `${cell}`)
+})
 
 let playerCells = document.querySelectorAll('.mapsquare')
 let pcCells = document.querySelectorAll('.mapSquarePc')
@@ -67,83 +68,107 @@ userProfile.ships.push(new boats('Sub', 2))
 userProfile.ships.push(new boats('Tug', 1))
 
 const boatYard = document.querySelector('#boats')
-const allBoatYard = document.querySelector('#boat-yard')
 
 
-userProfile.ships.forEach((ship) => {
-  const divTop = document.createElement('div')
-  divTop.classList.add(`ships`)
-  divTop.setAttribute(`draggable`, `true`)
-  divTop.setAttribute(`id`, `${ship.name}`)
-  boatYard.appendChild(divTop)
-  const shipName = document.querySelector(`#${ship.name}`)
-  for (let i = 0; i < ship.length; i++) {
-    const div = document.createElement('div')
-    div.setAttribute('id', `${ship.name}${i}`)
-    shipName.appendChild(div)
-  }
+function createUserShips() {
+  userProfile.ships.forEach((ship) => {
+    boatYard.classList.add('boats')
+    const divTop = document.createElement('div')
+    divTop.classList.add(`ships`)
+    divTop.setAttribute(`draggable`, `true`)
+    divTop.setAttribute(`id`, `${ship.name}`)
+    boatYard.appendChild(divTop)
+    const shipName = document.querySelector(`#${ship.name}`)
+    for (let i = 0; i < ship.length; i++) {
+      const div = document.createElement('div')
+      div.setAttribute('id', `${ship.name}${i}`)
+      shipName.appendChild(div)
+    }
+  })
+}
+
+//! Here!!!! for some reason the button will have ot be called from here????
+const startButton = document.querySelector('.gamestart')
+
+
+
+console.log(startButton)
+startButton.addEventListener('click', () => {
+  maps.classList.add('maps')
+  playerMap.classList.add('playermap')
+  pcMap.classList.add('pcmap')
+  playerCells.forEach((cell) => cell.classList.add('mapsquare1'))
+  pcCells.forEach((cell) => cell.classList.add('mapSquarePc1'))
+  createUserShips()
+  dragDrop()
+
 })
 
-let selectedShipCurrentId
-let draggedShip
-let draggedShipLength
-
-const playerShips = Array.from(document.querySelectorAll('.ships'))
-
-
-playerShips.forEach(square => square.addEventListener('dragstart', dragStart))
-playerCells.forEach(square => square.addEventListener('dragstart', dragStart))
-playerCells.forEach(square => square.addEventListener('dragover', (e) => {
-  e.preventDefault()
-}))
-playerCells.forEach(square => square.addEventListener('dragenter', (e) => {
-  e.preventDefault()
-}))
-playerCells.forEach(square => square.addEventListener('dragleave', (e) => {
-  e.preventDefault()
-}))
-playerCells.forEach(square => square.addEventListener('drop', dragDrop))
-playerCells.forEach(square => square.addEventListener('dragend', () => {
-}))
-
-playerCells.forEach(cell => cell.addEventListener('click', () => {
-}))
-
-playerShips.forEach(ship => ship.addEventListener('mousedown', (e) => {
-  selectedShipCurrentId = e.target.id
-  selectedShipCurrentId = Number(selectedShipCurrentId.replace(/\D/g, ''))
-}))
 
 
 
-function dragStart() {
-  draggedShip = this
-  draggedShipLength = this.childNodes.length
-
-
-}
 
 function dragDrop() {
-  const shipNameWithLastId = draggedShip.lastChild.id
-  const shipClass = shipNameWithLastId.slice(0, -1)
-  const targetSquare = Number(this.id)
-  const widthCorrection = width * selectedShipCurrentId
-  const lastShipTarget = Number(shipNameWithLastId.substr(-1))
-  const lastIndexPlaced = Number(draggedShipLength + targetSquare)
+  let selectedShipCurrentId
+  let draggedShip
+  let draggedShipLength
 
-  const outOfBoundsVerticle = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-
-  const offLimitsVerticle = outOfBoundsVerticle.splice(0, 10 * lastShipTarget)
+  const playerShips = Array.from(document.querySelectorAll('.ships'))
 
 
-  for (let i = 1; i < draggedShipLength + 1; i++) {
-    playerCells[(targetSquare - width) + ((width * i)) - widthCorrection].setAttribute('id', `${shipClass}1`)
-    playerCells[(targetSquare - width) + ((width * i)) - widthCorrection].classList.add('taken')
+  playerShips.forEach(square => square.addEventListener('dragstart', dragStart))
+  playerCells.forEach(square => square.addEventListener('dragstart', dragStart))
+  playerCells.forEach(square => square.addEventListener('dragover', (e) => {
+    e.preventDefault()
+  }))
+  playerCells.forEach(square => square.addEventListener('dragenter', (e) => {
+    e.preventDefault()
+  }))
+  playerCells.forEach(square => square.addEventListener('dragleave', (e) => {
+    e.preventDefault()
+  }))
+  playerCells.forEach(square => square.addEventListener('drop', dragDrop))
+  playerCells.forEach(square => square.addEventListener('dragend', () => {
+  }))
+
+  playerCells.forEach(cell => cell.addEventListener('click', () => {
+  }))
+
+  playerShips.forEach(ship => ship.addEventListener('mousedown', (e) => {
+    selectedShipCurrentId = e.target.id
+    selectedShipCurrentId = Number(selectedShipCurrentId.replace(/\D/g, ''))
+  }))
+
+
+
+  function dragStart() {
+    draggedShip = this
+    draggedShipLength = this.childNodes.length
+
+
   }
-  boatYard.removeChild(draggedShip)
 
+  function dragDrop() {
+    const shipNameWithLastId = draggedShip.lastChild.id
+    const shipClass = shipNameWithLastId.slice(0, -1)
+    const targetSquare = Number(this.id)
+    const widthCorrection = width * selectedShipCurrentId
+    const lastShipTarget = Number(shipNameWithLastId.substr(-1))
+    const lastIndexPlaced = Number(draggedShipLength + targetSquare)
+
+    const outOfBoundsVerticle = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+
+    const offLimitsVerticle = outOfBoundsVerticle.splice(0, 10 * lastShipTarget)
+
+
+    for (let i = 1; i < draggedShipLength + 1; i++) {
+      playerCells[(targetSquare - width) + ((width * i)) - widthCorrection].setAttribute('id', `${shipClass}1`)
+      playerCells[(targetSquare - width) + ((width * i)) - widthCorrection].classList.add('taken')
+    }
+    boatYard.removeChild(draggedShip)
+
+  }
 }
-
 
 
 //! Generating PC ships and positions 
@@ -253,9 +278,8 @@ function hit(cellShip) {
 
 }
 
-// ! User Firing Function
 
-function userFiring(cell) {
+pcCells.forEach(cell => cell.addEventListener('click', () => {
   const cellShip = ((cell.id).substr(0, cell.id.length))
 
   if (cell.classList.contains('taken')) {
@@ -271,20 +295,13 @@ function userFiring(cell) {
   setTimeout(() => {
     computerTurn()
   }, 500)
-
-  cell.disabled = true
-}
-
-
-
-// ! Event listener for player
-
-
-pcCells.forEach(cell => cell.addEventListener('click', () => {
-  userFiring(cell)
-}, { once: true })
+})
 )
 
+
+function userFiring(cell) {
+
+}
 
 // ! PC Firing 
 
@@ -440,3 +457,7 @@ function computerTurn() {
     }
   }
 }
+
+
+// ! Styling and welcome screen
+

@@ -3,10 +3,50 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(29, 29, 29);
-  font-family: 'Roboto', sans-serif;
-  font-family: 'Roboto', sans-serif;
+  background-color: rgb(45, 161, 255);
+  font-family: 'Press Start 2P', cursive;
+
 }
+
+.intro {
+  background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5d7525de-b2fb-49f9-820b-23cacd4e5cb3/dd04wye-e28e4b24-da5f-4d00-bf19-f24ad3340cc3.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvNWQ3NTI1ZGUtYjJmYi00OWY5LTgyMGItMjNjYWNkNGU1Y2IzXC9kZDA0d3llLWUyOGU0YjI0LWRhNWYtNGQwMC1iZjE5LWYyNGFkMzM0MGNjMy5naWYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.6iHgdNBha8P_1wv9V952XW1jWJnWNMzRPPl9I04Zx_c);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#introcard {
+  margin-top: 100px;
+  height: 70%;
+  width: 70%;
+  border: 3px solid white;
+  background-color: rgba(7, 7, 212, 0.281);
+  box-shadow: 10px 10px darkblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#introcard h2 {
+  font-size: 75px;
+  align-self: center;
+  justify-content: center;
+  color: white;
+  text-shadow: rgb(0, 0, 0) 3px 3px 1px;
+}
+
+button {
+
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ align-self: center;
+ justify-self: center;
+ width: 300px;
+ height: 75px;
+ font-size: 30px;
+ font-family: 'Press Start 2P', cursive;
+}
+
 
 h1 {
   font-size: 50px;
@@ -14,14 +54,14 @@ h1 {
   color: white;
 }
 
-#maps {
+.maps {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-#playermap, #pcmap {
+.playermap, .pcmap {
   height: 550px;
   width: 550px;
   margin: 50px;
@@ -34,6 +74,13 @@ h1 {
 }
 
 .mapsquare, .mapSquarePc {
+  /* height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  background-color: aqua; */
+}
+
+.mapsquare1, .mapSquarePc1 {
   height: 50px;
   width: 50px;
   border: 1px solid black;
@@ -48,7 +95,7 @@ h1 {
   background-color: gray;
 }
 
-#boatyard {
+.boatyard {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -56,7 +103,7 @@ h1 {
   justify-content: center;
 }
 
-#boats {
+.boats {
   width: 500px;
   height: 250px;
   display: flex;
