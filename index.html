@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="style.css">
   <title>Battleships</title>
 </head>
+
 <body class="intro">
   <header>
   </header>
@@ -15,15 +17,44 @@
     <div id="playermap"></div>
     <div id="pcmap"></div>
   </section>
+  <section id="turns">
+    <div id="pcBox">
+      <h2 id='pcTurn' class="disabledtext">Computers turn!</h2>
+      <div id="playerSunkShips" class="disabled">
+        <h2 id="playerCarrier">Carrier</h2>
+        <h2 id="playerBattleship">Battleship</h2>
+        <h2 id="playerCruiser">Cruiser</h2>
+        <h2 id="playerSub">Sub</h2>
+        <h2 id="PlayerTug">Tug</h2>
+      </div>
+    </div>
+
+    <div id="playerBox">
+      <h2 id='yourTurn' class="disabledtext">Your Turn!</h2>
+      <div id="pcSunkShips" class="disabled">
+        <h2 id="pcCarrier">Carrier</h2>
+        <h2 id="pcBattleship">Battleship</h2>
+        <h2 id="pcCruiser">Cruiser</h2>
+        <h2 id="pcSub">Sub</h2>
+        <h2 id="pcTug">Tug</h2>
+      </div>
+    </div>
+
+  </section>
   <section id="boat-yard">
     <h1></h1>
+    <button id="rotate" class="disabled">Rotate</button>
     <div id="boats"></div>
   </section>
   <section id="introcard">
     <h2>Battleships</h2>
     <button class="gamestart">Start!</button>
   </section>
+  <section id="winscreen" class="disabled">
+    <h2>You Win!</h2>
+    <button class="reset">Play again!</button>
 
+  </section>
 
   <footer>
 
@@ -31,4 +62,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>

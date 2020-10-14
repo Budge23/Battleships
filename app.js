@@ -1,8 +1,28 @@
 //! Setting the Map
-
+const body = document.querySelector('body')
 const maps = document.querySelector('#maps')
 const playerMap = document.querySelector('#playermap')
 const pcMap = document.querySelector('#pcmap')
+const winscreen = document.querySelector('#winscreen')
+const textYourTurn = document.querySelector('#yourTurn')
+const textPcTurn = document.querySelector('#pcTurn')
+const rotateButton = document.querySelector('#rotate')
+let horizontal = true
+const playerScoreBox = document.querySelector('#playerSunkShips')
+const pcScoreBox = document.querySelector('#pcSunkShips')
+
+
+const playerCarrierText = document.querySelector("#playerCarrier")
+const playerBattleshipText = document.querySelector("#playerBattleship")
+const playerCruiserText = document.querySelector("#playerCruiser")
+const playerSubText = document.querySelector("#playerSub")
+const playerTugText = document.querySelector("#PlayerTug")
+
+const pcCarrierText = document.querySelector('#pcCarrier')
+const pcBattleshipText = document.querySelector('#pcBattleship')
+const pcCruiserText = document.querySelector('#pcCruiser')
+const pcSubText = document.querySelector('#pcSub')
+const pcTugText = document.querySelector('#pcTug')
 
 let width = 10
 
@@ -19,6 +39,7 @@ function createBoard() {
     div.classList.add('mapSquarePc')
     pcMap.appendChild(div)
     div.setAttribute('id', `${cell}`)
+    div.setAttribute('data-id', `${cell}`)
   })
 
   divArray.forEach((cell) => {
@@ -26,6 +47,7 @@ function createBoard() {
     div.classList.add('mapsquare')
     playerMap.appendChild(div)
     div.setAttribute(`id`, `${cell}`)
+    div.setAttribute('data-id', `${cell}`)
   })
   playerCells = document.querySelectorAll('.mapsquare')
   pcCells = document.querySelectorAll('.mapSquarePc')
@@ -33,7 +55,7 @@ function createBoard() {
 
 let playerCells = null
 let pcCells = null
-
+let playerCellsData = null
 
 //! Creating the profiles and player boats
 
@@ -54,13 +76,7 @@ class boats {
     this.lives = length
   }
 
-  hit() {
 
-  }
-
-  sunk() {
-
-  }
 }
 
 userProfile.ships.push(new boats('Carrier', 5))
@@ -71,9 +87,12 @@ userProfile.ships.push(new boats('Tug', 1))
 
 
 const boatYard = document.querySelector('#boats')
-
+const yard = document.querySelector('#boat-yard')
 
 function createUserShips() {
+
+  const h1 = yard.querySelector('h1')
+  h1.innerHTML = 'Welcome to the Dockyard! <br> Place your ships!'
   userProfile.ships.forEach((ship) => {
     boatYard.classList.add('boats')
     const divTop = document.createElement('div')
@@ -92,7 +111,7 @@ function createUserShips() {
 
 
 
-function dragDrop() {
+function DragDrop() {
   let selectedShipCurrentId
   let draggedShip
   let draggedShipLength
@@ -137,23 +156,39 @@ function dragDrop() {
     const shipClass = shipNameWithLastId.slice(0, -1)
     const targetSquare = Number(this.id)
     const widthCorrection = width * selectedShipCurrentId
-    const lastShipTarget = Number(shipNameWithLastId.substr(-1))
-    const lastIndexPlaced = Number(draggedShipLength + targetSquare)
+    const lengthCorrection = width + selectedShipCurrentId
 
-    const outOfBoundsVerticle = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
-
-    const offLimitsVerticle = outOfBoundsVerticle.splice(0, 10 * lastShipTarget)
-
-
-    for (let i = 1; i < draggedShipLength + 1; i++) {
-      playerCells[(targetSquare - width) + ((width * i)) - widthCorrection].setAttribute('id', `${shipClass}1`)
-      playerCells[(targetSquare - width) + ((width * i)) - widthCorrection].classList.add('taken')
+    if (!horizontal) {
+      for (let i = 1; i < draggedShipLength + 1; i++) {
+        playerCells[(targetSquare - width) + ((width * i)) - widthCorrection].setAttribute('id', `${shipClass}V`)
+        playerCells[(targetSquare - width) + ((width * i)) - widthCorrection].classList.add('taken', 'ships')
+      }
+    } else {
+      for (let i = 1; i < draggedShipLength + 1; i++) {
+        playerCells[(targetSquare - selectedShipCurrentId) + ((i - 1))].setAttribute('id', `${shipClass}V`)
+        playerCells[(targetSquare - selectedShipCurrentId) + ((i - 1))].classList.add('taken', 'ships')
+      }
     }
+
     boatYard.removeChild(draggedShip)
 
+    if (boatYard.childNodes.length === 0) {
+      const yard = document.querySelector('#boat-yard')
+      pcCells.forEach(cell => cell.classList.add('mapSquarePc'))
+      pcMap.classList.add('pcmap')
+      yard.remove()
+      textYourTurn.classList.remove('disabledtext')
+      playerScoreBox.classList.remove('disabled')
+      playerScoreBox.classList.add('playerSunkShips')
+      pcScoreBox.classList.remove('disabled')
+      pcScoreBox.classList.add('pcSunkShips')
+    }
   }
+
 }
 
+// playerCells[(targetSquare + width) + ((width + i)) - lengthCorrection].setAttribute('id', `${shipClass}V`)
+//         playerCells[(targetSquare + width) + ((width + i)) - lengthCorrection].classList.add('taken', 'ships')
 
 //! Generating PC ships and positions 
 
@@ -191,7 +226,7 @@ function computerStart() {
       const isTaken = shipArray.some(r => isNaN(r))
       if (!isTaken && !confirmCell) {
         for (let i = 0; i < ship.length; i++) {
-          pcCells[(randomStart + (direction * i))].setAttribute('id', `${ship.name}`)
+          pcCells[(randomStart + (direction * i))].setAttribute('id', `${ship.name}V`)
           pcCells[(randomStart + (direction * i))].classList.add('taken')
         }
         placed = true
@@ -209,33 +244,30 @@ function computerStart() {
 // ! Ship health and firing 
 
 
-let pcCarrierHealth = 0
-let pcBattleshipHealth = 0
-let pcCruiserHealth = 0
-let pcSubHealth = 0
-let pcTugHealth = 0
+let pcCarrierHealth = 5
+let pcBattleshipHealth = 4
+let pcCruiserHealth = 3
+let pcSubHealth = 2
+let pcTugHealth = 1
 let pcLives = 4
 
 function sunk() {
-  console.log(pcLives)
+
   if (pcLives === 0) {
-    console.log('game over')
+    winscreen.classList.remove('disabled')
+    winscreen.classList.add('win')
+    maps.remove()
+    textPcTurn.classList.add('disabledtext')
+    textYourTurn.classList.add('disabled')
   } else {
     return pcLives--
   }
 }
 
-let cellship = null
-
 function hit(cellShip) {
-  pcCarrierHealth = pcProfile.ships[0].lives
-  pcBattleshipHealth = pcProfile.ships[1].lives
-  pcCruiserHealth = pcProfile.ships[2].lives
-  pcSubHealth = pcProfile.ships[3].lives
-  pcTugHealth = pcProfile.ships[4].lives
-  pcLives = 4
   if (cellShip === 'Carrier') {
     if (pcCarrierHealth === 1) {
+      pcCarrierText.classList.add('sunk')
       sunk()
     } else {
       pcCarrierHealth--
@@ -243,24 +275,28 @@ function hit(cellShip) {
 
   } else if (cellShip === 'Battleship') {
     if (pcBattleshipHealth === 1) {
+      pcBattleshipText.classList.add('sunk')
       sunk()
     } else pcBattleshipHealth--
 
 
   } else if (cellShip === 'Cruiser') {
     if (pcCruiserHealth === 1) {
+      pcCruiserText.classList.add('sunk')
       sunk()
     } else pcCruiserHealth--
 
 
   } else if (cellShip === 'Sub') {
     if (pcSubHealth === 1) {
+      pcSubText.classList.add('sunk')
       sunk()
     } else
       pcSubHealth -= 1
 
   } else if (cellShip === 'Tug') {
     if (pcTugHealth === 1) {
+      pcTugText.classList.add('sunk')
       sunk()
     } else pcTugHealth--
 
@@ -270,9 +306,9 @@ function hit(cellShip) {
 }
 
 function userClick() {
-  pcCells.forEach(cell => cell.addEventListener('click', () => {
-    const cellShip = ((cell.id).substr(0, cell.id.length))
 
+  pcCells.forEach(cell => cell.addEventListener('click', () => {
+    const cellShip = ((cell.id).substr(0, cell.id.length - 1))
     if (cell.classList.contains('taken')) {
       hit(cellShip)
       cell.removeAttribute('id')
@@ -281,12 +317,17 @@ function userClick() {
     } else {
       cell.classList.add('miss')
     }
-
+    textYourTurn.classList.add('disabledtext')
+    textPcTurn.classList.remove('disabledtext')
 
     setTimeout(() => {
       computerTurn()
+      setTimeout(() => {
+        textYourTurn.classList.remove('disabledtext')
+        textPcTurn.classList.add('disabledtext')
+      }, 500)
     }, 500)
-  }, { once: true })
+  })
   )
 }
 
@@ -294,17 +335,22 @@ function userClick() {
 
 // ! PC Firing 
 
-let playerCarrierHealth = 0
-let playerBattleshipHealth = 0
-let playerCruiserHealth = 0
-let playerSubHealth = 0
-let playerTugHealth = 0
+let playerCarrierHealth = 5
+let playerBattleshipHealth = 4
+let playerCruiserHealth = 3
+let playerSubHealth = 2
+let playerTugHealth = 1
 let playerLives = 4
 
 function playerSunk() {
-  console.log(playerLives)
+
   if (playerLives === 0) {
-    console.log('game over')
+
+    winscreen.classList.remove('disabled')
+    winscreen.classList.add('win')
+    maps.remove()
+    textPcTurn.classList.add('disabledtext')
+    textYourTurn.classList.add('disabled')
   } else {
     return playerLives--
   }
@@ -313,82 +359,50 @@ function playerSunk() {
 let PlayerCellShip = null
 
 function playerHit(PlayerCellShip) {
-  playerCarrierHealth = userProfile.ships[0].lives
-  playerBattleshipHealth = userProfile.ships[1].lives
-  playerCruiserHealth = userProfile.ships[2].lives
-  playerSubHealth = userProfile.ships[3].lives
-  playerTugHealth = userProfile.ships[4].lives
-  playerLives = 4
+
 
 
   if (PlayerCellShip === 'Carrier') {
     if (playerCarrierHealth === 1) {
+      playerCarrierText.classList.add('sunk')
       playerSunk()
-      return (
-        computerTurnOne = null,
-        computerTurnTwo = null,
-        computerTurnThree = null,
-        computerTurnFour = null
-      )
     } else {
       playerCarrierHealth--
     }
 
   } else if (PlayerCellShip === 'Battleship') {
     if (playerBattleshipHealth === 1) {
+      playerBattleshipText.classList.add('sunk')
       playerSunk()
-      return (
-        computerTurnOne = null,
-        computerTurnTwo = null,
-        computerTurnThree = null,
-        computerTurnFour = null
-      )
     } else playerBattleshipHealth--
 
 
   } else if (PlayerCellShip === 'Cruiser') {
     if (playerCruiserHealth === 1) {
+      playerCruiserText.classList.add('sunk')
       playerSunk()
-      return (
-        computerTurnOne = null,
-        computerTurnTwo = null,
-        computerTurnThree = null,
-        computerTurnFour = null
-      )
     } else playerCruiserHealth--
 
 
   } else if (PlayerCellShip === 'Sub') {
     if (playerSubHealth === 1) {
+      playerSubText.classList.add('sunk')
       playerSunk()
-      return (
-        computerTurnOne = null,
-        computerTurnTwo = null,
-        computerTurnThree = null,
-        computerTurnFour = null
-      )
     } else
       playerSubHealth -= 1
 
   } else if (PlayerCellShip === 'Tug') {
     if (playerTugHealth === 1) {
+      playerTugText.classList.add('sunk')
       playerSunk()
-      return (
-        computerTurnOne = null,
-        computerTurnTwo = null,
-        computerTurnThree = null,
-        computerTurnFour = null
-      )
     } else playerTugHealth--
   }
 
 }
 
-let computerTurnOne = null
-let computerTurnTwo = null
-let computerTurnThree = null
-let computerTurnFour = null
-
+let firstHitValue = null
+let lastAttemptValue = null
+let directionArray = [-1,-10,1,10]
 
 // ! Computer Turn 
 
@@ -396,75 +410,97 @@ function computerTurn() {
   let canGo = false
   while (canGo === false) {
     playerCells = Array.from(playerCells)
-
-    const availableCells = playerCells.filter(word => !word.classList.contains('miss', 'hit'))
-
-    const randomCell = Math.floor(Math.random() * availableCells.length)
-
+    let availableCells = playerCells.filter(word => (!word.classList.contains('miss') && !word.classList.contains('hit')))
+    const randomCell = Math.floor(Math.random() * playerCells.length)
+    console.log(availableCells)
     const targetCell = playerCells[randomCell]
     const PlayerCellShip = (targetCell.id).substr(0, targetCell.id.length - 1)
-    if (availableCells.includes(targetCell)) {
+    console.log(targetCell)
+    if (!targetCell.classList.contains('miss') && !targetCell.classList.contains('hit')) {
       canGo = true
-      if (computerTurnOne === null && computerTurnTwo === null) {
-        if (playerCells[randomCell].classList.contains('taken')) {
-          playerHit(PlayerCellShip)
-          targetCell.classList.add('hit')
-          targetCell.removeAttribute(`id`)
-        } else {
-          targetCell.classList.add('miss')
-        }
-        // } else if (computerTurnOne !== null && computerTurnTwo === null) {
+      if (playerCells[randomCell].classList.contains('taken')) {
+        playerHit(PlayerCellShip)
+        console.log(PlayerCellShip)
+        targetCell.removeAttribute(`id`)
+        targetCell.classList.remove('ships')
+        targetCell.classList.add('hit')
 
-
-        //   let canGoTwo = false
-        //   while (canGoTwo === false) {
-        //     const opTwo = [-10, -1, 1, 10]
-        //     console.log(opTwo.length)
-        //     const randomGoTwo = Math.floor(Math.random() * opTwo.length)
-        //     console.log(opTwo[randomGoTwo])
-        //     let goTwo = (playerCells[computerTurnOne + opTwo[randomGoTwo]])
-
-        //     if (availableCells.includes(goTwo)) {
-        //       canGoTwo = true
-        //       if (goTwo.classList.contains('taken')) {
-
-        //         let playerCellShip = (goTwo.id).substr(0, goTwo.length)
-        //         playerHit(playerCellShip)
-        //         goTwo.classList.add('hit')
-        //         goTwo.removeAttribute('id')
-        //         let computerTurnTwo = goTwo
-
-        //       } else {
-        //         goTwo.classList.add('miss')
-        //       }
-        //     } else {
-        //       canGoTwo = false
-        //     }
-        //   }
       } else {
-        canGo = false
+        targetCell.classList.add('miss')
       }
+      // } else if (computerTurnOne !== null && computerTurnTwo === null) {
 
+
+      //   let canGoTwo = false
+      //   while (canGoTwo === false) {
+      //     const opTwo = [-10, -1, 1, 10]
+      //     console.log(opTwo.length)
+      //     const randomGoTwo = Math.floor(Math.random() * opTwo.length)
+      //     console.log(opTwo[randomGoTwo])
+      //     let goTwo = (playerCells[computerTurnOne + opTwo[randomGoTwo]])
+
+      //     if (availableCells.includes(goTwo)) {
+      //       canGoTwo = true
+      //       if (goTwo.classList.contains('taken')) {
+
+      //         let playerCellShip = (goTwo.id).substr(0, goTwo.length)
+      //         playerHit(playerCellShip)
+      //         goTwo.classList.add('hit')
+      //         goTwo.removeAttribute('id')
+      //         let computerTurnTwo = goTwo
+
+      //       } else {
+      //         goTwo.classList.add('miss')
+      //       }
+      //     } else {
+      //       canGoTwo = false
+      //     }
+      //   }
+    } else {
+      canGo = false
     }
+
   }
 }
 
 
+
 // ! Styling and welcome screen
+
+function horizontalCheck() {
+  horizontal = horizontal ? false : true
+}
 
 const startButton = document.querySelector('.gamestart')
 const introcard = document.querySelector('#introcard')
+const resetButton = document.querySelector('.reset')
 
 
-console.log(startButton)
 startButton.addEventListener('click', () => {
   maps.classList.add('maps')
   playerMap.classList.add('playermap')
-  pcMap.classList.add('pcmap')
+  rotateButton.classList.remove('disabled')
   createBoard()
   createUserShips()
-  dragDrop()
+  DragDrop()
+  pcCells.forEach(cell => cell.classList.remove('mapSquarePc'))
   computerStart()
   userClick()
   introcard.remove()
+})
+
+resetButton.addEventListener('click', () => {
+  location.reload()
+})
+
+rotateButton.addEventListener('click', () => {
+
+  const playerShips = Array.from(document.querySelectorAll('#boats div'))
+  const boats = document.querySelector('#boats')
+  playerShips.forEach(ship => ship.classList.toggle('ships'))
+  playerShips.forEach(ship => ship.classList.toggle('shipsH'))
+  boats.classList.toggle('boatsH')
+  boats.classList.toggle('boats')
+  horizontalCheck()
+
 })
