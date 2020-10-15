@@ -366,6 +366,7 @@ function playerHit(PlayerCellShip) {
     if (playerCarrierHealth === 1) {
       playerCarrierText.classList.add('sunk')
       playerSunk()
+      resetTargeting()
     } else {
       playerCarrierHealth--
     }
@@ -374,6 +375,7 @@ function playerHit(PlayerCellShip) {
     if (playerBattleshipHealth === 1) {
       playerBattleshipText.classList.add('sunk')
       playerSunk()
+      resetTargeting()
     } else playerBattleshipHealth--
 
 
@@ -381,6 +383,7 @@ function playerHit(PlayerCellShip) {
     if (playerCruiserHealth === 1) {
       playerCruiserText.classList.add('sunk')
       playerSunk()
+      resetTargeting()
     } else playerCruiserHealth--
 
 
@@ -388,6 +391,7 @@ function playerHit(PlayerCellShip) {
     if (playerSubHealth === 1) {
       playerSubText.classList.add('sunk')
       playerSunk()
+      resetTargeting()
     } else
       playerSubHealth -= 1
 
@@ -395,6 +399,7 @@ function playerHit(PlayerCellShip) {
     if (playerTugHealth === 1) {
       playerTugText.classList.add('sunk')
       playerSunk()
+      resetTargeting()
     } else playerTugHealth--
   }
 
@@ -402,67 +407,138 @@ function playerHit(PlayerCellShip) {
 
 let firstHitValue = null
 let lastAttemptValue = null
-let directionArray = [-1,-10,1,10]
+let directionArray = [-10, -1, 1, 10]
+let secondattempt
+let thirdattempt
 
 // ! Computer Turn 
 
 function computerTurn() {
-  let canGo = false
-  while (canGo === false) {
-    playerCells = Array.from(playerCells)
-    let availableCells = playerCells.filter(word => (!word.classList.contains('miss') && !word.classList.contains('hit')))
-    const randomCell = Math.floor(Math.random() * playerCells.length)
-    console.log(availableCells)
-    const targetCell = playerCells[randomCell]
-    const PlayerCellShip = (targetCell.id).substr(0, targetCell.id.length - 1)
-    console.log(targetCell)
-    if (!targetCell.classList.contains('miss') && !targetCell.classList.contains('hit')) {
-      canGo = true
-      if (playerCells[randomCell].classList.contains('taken')) {
-        playerHit(PlayerCellShip)
-        console.log(PlayerCellShip)
-        targetCell.removeAttribute(`id`)
-        targetCell.classList.remove('ships')
-        targetCell.classList.add('hit')
 
+  if (firstHitValue === null) {
+    let canGo = false
+    while (canGo === false) {
+      playerCells = Array.from(playerCells)
+
+      const randomCell = Math.floor(Math.random() * playerCells.length)
+
+      const targetCell = playerCells[randomCell]
+      let PlayerCellShip = (targetCell.id).substr(0, targetCell.id.length - 1)
+
+      console.log((targetCell.dataset.id))
+
+      if (!targetCell.classList.contains('miss') && !targetCell.classList.contains('hit')) {
+        canGo = true
+        if (playerCells[randomCell].classList.contains('taken')) {
+          playerHit(PlayerCellShip)
+          targetCell.removeAttribute(`id`)
+          targetCell.classList.remove('ships')
+          targetCell.classList.add('hit')
+          firstHitValue = parseInt(targetCell.dataset.id)
+        } else {
+          targetCell.classList.add('miss')
+        }
       } else {
-        targetCell.classList.add('miss')
+        canGo = false
       }
-      // } else if (computerTurnOne !== null && computerTurnTwo === null) {
 
-
-      //   let canGoTwo = false
-      //   while (canGoTwo === false) {
-      //     const opTwo = [-10, -1, 1, 10]
-      //     console.log(opTwo.length)
-      //     const randomGoTwo = Math.floor(Math.random() * opTwo.length)
-      //     console.log(opTwo[randomGoTwo])
-      //     let goTwo = (playerCells[computerTurnOne + opTwo[randomGoTwo]])
-
-      //     if (availableCells.includes(goTwo)) {
-      //       canGoTwo = true
-      //       if (goTwo.classList.contains('taken')) {
-
-      //         let playerCellShip = (goTwo.id).substr(0, goTwo.length)
-      //         playerHit(playerCellShip)
-      //         goTwo.classList.add('hit')
-      //         goTwo.removeAttribute('id')
-      //         let computerTurnTwo = goTwo
-
-      //       } else {
-      //         goTwo.classList.add('miss')
-      //       }
-      //     } else {
-      //       canGoTwo = false
-      //     }
-      //   }
-    } else {
-      canGo = false
     }
-
+  } else if (firstHitValue !== null && lastAttemptValue === null) {
+    if (firstHitValue < 10) {
+      directionArray.shift()
+      let secondattempt = playerCells[firstHitValue + directionArray[0]]
+      if (!secondattempt.classList.contains('miss') && !secondattempt.classList.contains('hit')) {
+        if (secondattempt.classList.contains('taken')) {
+          PlayerCellShip = (secondattempt.id).substr(0, secondattempt.id.length - 1)
+          playerHit(PlayerCellShip)
+          secondattempt.removeAttribute(`id`)
+          secondattempt.classList.remove('ships')
+          secondattempt.classList.add('hit')
+          lastAttemptValue = secondattempt.dataset.id
+        } else {
+          lastAttemptValue = 'missed'
+          directionArray.shift()
+        }
+      } else {
+        lastAttemptValue = 'missed'
+        directionArray.shift()
+      }
+    } else if (firstHitValue > 89) {
+      directionArray.pop()
+      secondattempt = playerCells[firstHitValue + directionArray[0]]
+      if (!secondattempt.classList.contains('miss') && !secondattempt.classList.contains('hit')) {
+        if (secondattempt.classList.contains('taken')) {
+          PlayerCellShip = (secondattempt.id).substr(0, secondattempt.id.length - 1)
+          playerHit(PlayerCellShip)
+          secondattempt.removeAttribute(`id`)
+          secondattempt.classList.remove('ships')
+          secondattempt.classList.add('hit')
+          lastAttemptValue = parseInt(secondattempt.dataset.id)
+        } else {
+          lastAttemptValue = 'missed'
+          directionArray.shift()
+        }
+      } else {
+        lastAttemptValue = 'missed'
+        directionArray.shift()
+      }
+    } else {
+      secondattempt = playerCells[firstHitValue + directionArray[0]]
+      if (!secondattempt.classList.contains('miss') && !secondattempt.classList.contains('hit')) {
+        if (secondattempt.classList.contains('taken')) {
+          PlayerCellShip = (secondattempt.id).substr(0, secondattempt.id.length - 1)
+          playerHit(PlayerCellShip)
+          secondattempt.removeAttribute(`id`)
+          secondattempt.classList.remove('ships')
+          secondattempt.classList.add('hit')
+          lastAttemptValue = parseInt(secondattempt.dataset.id)
+        } else {
+          lastAttemptValue = 'missed'
+          directionArray.shift()
+        }
+      } else {
+        lastAttemptValue = 'missed'
+        directionArray.shift()
+      }
+    }
+  } else if (firstHitValue !== null && lastAttemptValue === 'missed') {
+    secondattempt = playerCells[firstHitValue + directionArray[0]]
+    if (!secondattempt.classList.contains('miss') && !secondattempt.classList.contains('hit')) {
+      if (secondattempt.classList.contains('taken')) {
+        PlayerCellShip = (secondattempt.id).substr(0, secondattempt.id.length - 1)
+        playerHit(PlayerCellShip)
+        secondattempt.removeAttribute(`id`)
+        secondattempt.classList.remove('ships')
+        secondattempt.classList.add('hit')
+        lastAttemptValue = parseInt(secondattempt.dataset.id)
+      } else {
+        lastAttemptValue = 'missed'
+        directionArray.shift()
+      }
+    } else {
+      lastAttemptValue = 'missed'
+      directionArray.shift()
+    }
+  } else if (firstHitValue !== null && !isNaN(lastAttemptValue)) {
+    thirdattempt = playerCells[lastAttemptValue + directionArray[0]]
+    if (!thirdattempt.classList.contains('miss') && !thirdattempt.classList.contains('hit')) {
+      if (thirdattempt.classList.contains('taken')) {
+        PlayerCellShip = (thirdattempt.id).substr(0, thirdattempt.id.length - 1)
+        playerHit(PlayerCellShip)
+        thirdattempt.removeAttribute(`id`)
+        thirdattempt.classList.remove('ships')
+        thirdattempt.classList.add('hit')
+        lastAttemptValue = parseInt(thirdattempt.dataset.id)
+      } else {
+        lastAttemptValue = 'missed'
+        directionArray.shift()
+      }
+    } else {
+      lastAttemptValue = 'missed'
+      directionArray.shift()
+    }
   }
 }
-
 
 
 // ! Styling and welcome screen
@@ -504,3 +580,9 @@ rotateButton.addEventListener('click', () => {
   horizontalCheck()
 
 })
+
+function resetTargeting() {
+  firstHitValue = null
+  lastAttemptValue = null
+  directionArray = [-10, -1, 1, 10]
+}
