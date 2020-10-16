@@ -56,9 +56,9 @@ h1 {
 }
 
 .maps {
-  width: 80%;
+
   margin-top: 3%;
-  background-color: rgba(7, 7, 212, 0.281);
+  background-color: rgba(0, 162, 255, 0.281);
   box-shadow: 10px 10px darkblue;
   display: flex;
   flex-direction: row;
@@ -69,10 +69,12 @@ h1 {
 }
 
 .playermap, .pcmap {
-  height: 800px;
-  width: 800px;
-  margin: 50px;
+  height: 600px;
+  width: 600px;
+  margin: 25px;
   background-color: rgb(0, 255, 255);
+  background-image: url(https://streak.club/img/Mix1c2VyX2NvbnRlbnQvdXBsb2Fkcy9pbWFnZS8zMjUzNi5wbmc=/600x/8kHIEB.png);
+  background-size: cover;
   display: flex;
   align-content: center;
   justify-content: center;
@@ -94,20 +96,30 @@ h2 {
 }
 
 .mapsquare, .mapSquarePc {
-  height: 9.5%;
-  width: 9.5%;
-  border: 1px solid rgba(63, 63, 63, 0.31);
+  height: 55px;
+  width: 55px;
+  border: 1px solid rgba(255, 255, 255, 0.683);
 }
 
 
 .hit {
-  background-color: black;
-  border-radius: 80px;
+  height: 9%;
+  width: 9%;
+  background-image: url(https://media4.giphy.com/media/1wmdI5Nk5MjD0XIwdy/source.gif);
+  background-color: rgba(30, 25, 25, 0.738);
+  background-size: 200%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .miss {
   background-color: gray;
-  border-radius: 80px;
+  background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d93b1022-9ff3-4a7e-93e4-e1517b86e43b/dayr3n5-7b91f173-bd67-48bb-8968-71ef8aaed681.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvZDkzYjEwMjItOWZmMy00YTdlLTkzZTQtZTE1MTdiODZlNDNiXC9kYXlyM241LTdiOTFmMTczLWJkNjctNDhiYi04OTY4LTcxZWY4YWFlZDY4MS5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.Qi6YUTNDywhkFKgNP-OfBy02aBCQKC9vsLEL8LexkwY);
+  background-color: rgba(30, 25, 25, 0.738);
+  background-size: 200%;
+  background-repeat: no-repeat;
+  background-position: center;
+  
 }
 
 #boat-yard {
@@ -120,110 +132,239 @@ h2 {
 }
 
 .boatsH {
-  width: 550px;
-  height: 450px;
+  width: 400px;
+  height: 300px;
   display: flex;
   background-color: aqua;
+  background-image: url(https://streak.club/img/Mix1c2VyX2NvbnRlbnQvdXBsb2Fkcy9pbWFnZS8zMjUzNi5wbmc=/600x/8kHIEB.png);
+  background-size: cover;
   justify-content: space-evenly;
   align-content: space-around;
+  flex-direction: column;
 }
 
 .boats {
-  width: 550px;
-  height: 450px;
+  width: 400px;
+  height: 300px;
   display: flex;
   background-color: aqua;
+  background-image: url(https://streak.club/img/Mix1c2VyX2NvbnRlbnQvdXBsb2Fkcy9pbWFnZS8zMjUzNi5wbmc=/600x/8kHIEB.png);
+  background-size: cover;
   justify-content: space-evenly;
   align-content: space-around;
-  flex-direction: column;
 }
 
+
+
 .ships {
-  height: fit-content;
   width: fit-content;
+  height: fit-content;
   display: flex;
+  flex-direction: column;
 }
 
 .shipsH {
-  width: fit-content;
   height: fit-content;
+  width: fit-content;
   display: flex;
-  flex-direction: column;
 }
 
 
 #Carrier div{
-  height: 80px;
-  width: 80px;
+  height: 55px;
+  width: 55px;
   background-color: red;
+  border-radius: 0%;
+  border: none;
 }
 
 #Battleship div {
-  height: 80px;
-  width: 80px;
-  background-color: green;
-
+  height: 55px;
+  width: 55px;
+  background-color: rgb(0, 255, 0);
+  border-radius: 0%;
+  border: none;
 }
 
 #Cruiser div {
-  height: 80px;
-  width: 80px;
+  height: 55px;
+  width: 55px;
   background-color: yellow;
-
+  border-radius: 0%;
+  border: none;
 }
 
 #Sub div {
-  height: 80px;
-  width: 80px;
-  background-color: orange;
-
+  height: 55px;
+  width: 55px;
+  background-color: rgb(255, 0, 230);
+  border-radius: 0%;
+  border: none;
 }
 
 #Tug div {
-  height: 80px;
-  width: 80px;
-  background-color: brown;
+  height: 55px;
+  width: 55px;
+  background-color: rgb(93, 0, 255);
+  border-radius: 0%;
+  border: none;
+
 
 }
 
- #CarrierV {
-  height: 9.5%;
-  width: 9.5%;
+  #Carrier1, #Carrier2, #Carrier3 {
   background-color: red;
   border: 1px solid red;
 }
 
-
-
- #BattleshipV {
-  height: 9.5%;
-  width: 9.5%;
-  background-color: green;
-  border: 1px solid green;
+#Carrier0 {
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  background-color: red;
+  border: 1px solid red;
+}
+#Carrier4 {
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  background-color: red;
+  border: 1px solid red;
 }
 
- #CruiserV{
-  height: 9.5%;
-  width: 9.5%;
+#Carrier6, #Carrier7, #Carrier8 {
+  background-color: red;
+  border: 1px solid red;
+}
+#Carrier5 {
+  background-color: red;
+  border: 1px solid red;
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+}
+
+#Carrier9 {
+  background-color: red;
+  border: 1px solid red;
+  border-bottom-right-radius: 50%;
+  border-top-right-radius: 50%;
+}
+
+
+ #Battleship1, #Battleship2 {
+  background-color: rgb(0, 255, 0);
+  border: 1px solid rgb(0, 255, 0);;
+}
+
+#Battleship0 {
+  background-color: rgb(0, 255, 0);
+  border: 1px solid rgb(0, 255, 0);;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+}
+
+#Battleship3 {
+  background-color: rgb(0, 255, 0);
+  border: 1px solid rgb(0, 255, 0);;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+
+
+#Battleship6, #Battleship7 {
+  background-color: rgb(0, 255, 0);
+  border: 1px solid rgb(0, 255, 0);;
+}
+
+#Battleship5 {
+  background-color: rgb(0, 255, 0);
+  border: 1px solid rgb(0, 255, 0);;
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+}
+
+#Battleship8 {
+  background-color: rgb(0, 255, 0);
+  border: 1px solid rgb(0, 255, 0);;
+  border-bottom-right-radius: 50%;
+  border-top-right-radius: 50%;
+}
+
+
+#Cruiser1{
   background-color: yellow;
   border: 1px solid yellow;
-
 }
 
- #SubV {
-  height: 9.5%;
-  width: 9.5%;
-  background-color: orange;
-  border: 1px solid orange;
-
+#Cruiser0{
+  background-color: yellow;
+  border: 1px solid yellow;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
 }
 
-#TugV {
-  height: 9.5%;
-  width: 9.5%;
-  background-color: brown;
-  border: 1px solid brown; 
+#Cruiser2{
+  background-color: yellow;
+  border: 1px solid yellow;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
 
+#Cruiser6{
+  background-color: yellow;
+  border: 1px solid yellow;
+}
+
+#Cruiser5{
+  background-color: yellow;
+  border: 1px solid yellow;
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+}
+
+#Cruiser7{
+  background-color: yellow;
+  border: 1px solid yellow;
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+}
+
+ #Sub0{
+  background-color: rgb(255, 0, 230);
+  border: 1px solid rgb(255, 0, 230);
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+}
+
+#Sub1 {
+  background-color: rgb(255, 0, 230);
+  border: 1px solid rgb(255, 0, 230);
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+
+#Sub5 {
+  background-color: rgb(255, 0, 230);
+  border: 1px solid rgb(255, 0, 230);
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+}
+
+#Sub6 {
+  background-color: rgb(255, 0, 230);
+  border: 1px solid rgb(255, 0, 230);
+  border-bottom-right-radius: 50%;
+  border-top-right-radius: 50%;
+}
+
+#Tug0 {
+  background-color: rgb(93, 0, 255);
+  border: 1px solid rgb(93, 0, 255); 
+  border-radius: 50%;
+
+}
+#Tug5 {
+  background-color: rgb(93, 0, 255);
+  border: 1px solid rgb(93, 0, 255); 
+  border-radius: 50%;
 }
 
 .overlay {
