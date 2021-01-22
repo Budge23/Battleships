@@ -6,6 +6,8 @@ We were given the task to choose from a set of grid-based games that could utili
 
 I took on the task of creating Battleships, one of the two 3/3 difficult games set out by our course instructor. 
 
+<a href='leejburgess.co.uk/Battleships'>Play here!</a> 
+
 ## 8-Bit Battleships
 
 Based on the classic board game this iteration of Battleships is a grid-based game where you seek to destroy your opponent's ships before they can destroy yours. 
